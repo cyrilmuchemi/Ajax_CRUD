@@ -1,12 +1,9 @@
 <?php
 
-echo "here and there";
-
-/*
 function query($query, $data = [])
 {
     $res = false;
-    if(!$con = mysqli_connect('localhost', 'root', ''))
+    if(!$con = mysqli_connect('localhost', 'root', '', 'customer_records'))
     {
         die("unable to connect!");
     }
@@ -23,4 +20,20 @@ function query($query, $data = [])
 
     return $res;
 }
-*/
+
+if(count($_POST) > 0)
+{
+    $info = [];
+
+    $info['data_type'] = $_POST['data_type'];
+
+    if($_POST['data_type'] == 'read')
+    {
+        $query = "select * from customer";
+        $result = query($query);
+
+        $info['data'] = $result;
+    }
+
+    echo json_encode($info);
+}

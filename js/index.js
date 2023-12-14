@@ -9,6 +9,8 @@ function send_data(obj, type) {
         }
     }
 
+    form.append('data_type', type);
+
     let ajax = new XMLHttpRequest();
 
     ajax.addEventListener('readystatechange', () => {
@@ -26,5 +28,31 @@ function send_data(obj, type) {
 }
 
 function handle_result(result) {
-    alert(result);
+
+    console.log(result);
+    let obj = JSON.parse(result);
+
+    if(typeof obj == 'object')
+    {
+        if(obj.data_type == 'read')
+        {
+            let tBody = document.querySelector('.js-table-body');
+            let str = "";
+
+            if(typeof obj.data == 'object')
+            {
+                for(let i = 0; i < obj.data.length; i++){
+
+                    let row = obj.data[i];
+                    str += `<tr><td>${row.id}</td><td>${row.name}</td><td>${row.image}</td><td>${row.email}</td><td>${row.age}</td><td>${row.city}</td></tr>`;
+                }
+              
+            }else{
+                str = "<tr><td>No records found!</td></tr>";
+            }
+
+            tBody.innerHTML = str;
+        }
+
+    }
 }
