@@ -29,7 +29,6 @@ function send_data(obj, type) {
 
 function handle_result(result) {
 
-    console.log(result);
     let obj = JSON.parse(result);
 
     if(typeof obj == 'object')
@@ -44,7 +43,7 @@ function handle_result(result) {
                 for(let i = 0; i < obj.data.length; i++){
 
                     let row = obj.data[i];
-                    str += `<tr><td>${row.id}</td><td>${row.name}</td><td>${row.image}</td><td>${row.email}</td><td>${row.age}</td><td>${row.city}</td></tr>`;
+                    str += `<tr><td>${row.id}</td><td>${row.name}</td><td>${row.image}</td><td>${row.email}</td><td>${row.age}</td><td>${row.city}</td><td><button class="btn btn-success btn-sm">Edit</button> <button class="btn btn-danger btn-sm">Delete</button></td></tr>`;
                 }
               
             }else{
@@ -56,3 +55,32 @@ function handle_result(result) {
 
     }
 }
+
+function display_image(file)
+{
+    const image = document.querySelector('.js-image');
+    image.src = URL.createObjectURL(file);
+}
+
+const addModal = new bootstrap.Modal('#add-new-modal', {});
+const addModalBtn = document.getElementById('add-modal-button');
+const myForm = document.querySelector('.add-user-form')
+
+addModalBtn.addEventListener('click', ()=>{
+    addModal.show()
+});
+
+const saveBtn = document.getElementById('save-button');
+
+myForm.addEventListener('submit', (event)=>{
+    event.preventDefault(); 
+    let obj = {};
+    let inputs = myForm.querySelectorAll('input, select, textarea');
+
+    for (let i = 0; i < inputs.length; i++) {
+        obj[inputs[i].id] = inputs[i].value;
+        inputs[i].value = "";
+    }
+        send_data(obj, 'save');
+        addModal.hide();
+});
