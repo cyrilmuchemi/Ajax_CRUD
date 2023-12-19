@@ -35,6 +35,13 @@ if (count($_POST) > 0) {
 
         $info['data'] = $result;
 
+    }else if ($_POST['data_type'] == 'delete') {
+        $id = (int)$_POST['id'];
+        $query = "delete from customer where id = $id limit 1";
+        $result = query($query);
+
+        $info['data'] = "Record Deleted";
+
     } else if ($_POST['data_type'] == 'save') {
         $image = "";
 

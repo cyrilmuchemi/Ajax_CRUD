@@ -29,7 +29,6 @@ function send_data(obj, type) {
 
 function handle_result(result) {
     try {
-        console.log("Response from server:", result);
         let obj = JSON.parse(result);
 
         if (typeof obj == 'object') {
@@ -40,7 +39,7 @@ function handle_result(result) {
                 if (typeof obj.data == 'object') {
                     for (let i = 0; i < obj.data.length; i++) {
                         let row = obj.data[i];
-                        str += `<tr><td>${row.id}</td><td>${row.name}</td><td>${row.image}</td><td>${row.email}</td><td>${row.age}</td><td>${row.city}</td><td><button class="btn btn-success btn-sm">Edit</button> <button class="btn btn-danger btn-sm">Delete</button></td></tr>`;
+                        str += `<tr><td>${row.id}</td><td>${row.name}</td><td><img src="${row.image}" style="width: 100px; height: 100px; object-fit: cover;"/></td><td>${row.email}</td><td>${row.age}</td><td>${row.city}</td><td><button class="btn btn-success btn-sm">Edit</button> <button onclick="delete_client(${row.id})" class="btn btn-danger btn-sm">Delete</button></td></tr>`;
                     }
                 } else {
                     str = "<tr><td>No records found!</td></tr>";
@@ -54,6 +53,9 @@ function handle_result(result) {
                     alert(obj.data);
                     send_data({}, 'read');
                 }
+            }else if(obj.data_type == 'delete'){
+                alert(obj.data);
+                send_data({}, 'read');
             }
         }
     } catch (error) {
@@ -95,3 +97,12 @@ myForm.addEventListener('submit', (event)=>{
         send_data(obj, 'save');
         addModal.hide();
 });
+
+function delete_client(id)
+{
+    if(!confirm('Are you sure you want to delete customer?')){
+        return;
+    }
+
+    send_data({id:id}, 'delete');
+}
